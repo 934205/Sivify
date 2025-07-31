@@ -58,7 +58,8 @@ app.post("/login",async (req,res,next)=>{
             .cookie("token",token,{
                 httpOnly:true,
                 secure:true,
-                sameSite:"none"
+                sameSite:"none",
+                maxAge: 24 * 60 * 60 * 1000
             })
             .json({
                 exists:true
@@ -194,7 +195,8 @@ app.post("/verify_otp",async (req,res,next)=>{
             .cookie("token",token,{
                 httpOnly:true,
                 secure:true,
-                sameSite:"none"
+                sameSite:"none",
+                maxAge: 24 * 60 * 60 * 1000
             })
             .json({
                 success:true
