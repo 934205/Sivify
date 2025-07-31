@@ -57,7 +57,8 @@ app.post("/login",async (req,res,next)=>{
             return res
             .cookie("token",token,{
                 httpOnly:true,
-                secure:true
+                secure:true,
+                sameSite:"none"
             })
             .json({
                 exists:true
@@ -192,7 +193,8 @@ app.post("/verify_otp",async (req,res,next)=>{
             return res
             .cookie("token",token,{
                 httpOnly:true,
-                secure:false
+                secure:true,
+                sameSite:"none"
             })
             .json({
                 success:true
