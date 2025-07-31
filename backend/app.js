@@ -57,7 +57,7 @@ app.post("/login",async (req,res,next)=>{
             return res
             .cookie("token",token,{
                 httpOnly:true,
-                secure:false
+                secure:true
             })
             .json({
                 exists:true
