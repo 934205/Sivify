@@ -836,8 +836,8 @@ io.on("connection",(sock)=>{
 
 
 
-server.listen(3000,'0.0.0.0',()=>{
-    console.log("Server Running");
+server.listen(process.env.PORT,()=>{
+    console.log("Server Running Successfully");
 })
 
 
