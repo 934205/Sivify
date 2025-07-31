@@ -593,7 +593,6 @@ GROUP BY posts.post_id
 ORDER BY posts.created_at DESC;
 `,[req.user.user_id]);
 
-
         rows.forEach((row)=>{
             row.file_urls=row.file_urls.split(",")
         })
