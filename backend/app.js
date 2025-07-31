@@ -580,17 +580,17 @@ app.get("/fetch_notifications",verifyToken,async (req,res,next)=>{
 app.get("/fetch_posts",verifyToken,async(req,res,next)=>{
     const [rows] = await mysql.execute(`
   SELECT 
-    posts.user_id,
-    posts.caption,
-    posts.created_at,
-    posts.post_id,
-    users.avatar_url,
-    GROUP_CONCAT(post_files.file_url) AS file_urls
-  FROM posts
-  JOIN post_files ON posts.post_id = post_files.post_id
-  JOIN users ON users.user_id = posts.user_id
-  GROUP BY posts.post_id 
-  order by posts.created_at DESC
+  posts.user_id,
+  posts.caption,
+  posts.created_at,
+  posts.post_id,
+  ANY_VALUE(users.avatar_url) AS avatar_url,
+  GROUP_CONCAT(post_files.file_url) AS file_urls
+FROM posts
+JOIN post_files ON posts.post_id = post_files.post_id
+JOIN users ON users.user_id = posts.user_id
+GROUP BY posts.post_id
+ORDER BY posts.created_at DESC;
 `,[req.user.user_id]);
 
 
