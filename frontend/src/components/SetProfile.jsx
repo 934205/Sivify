@@ -68,7 +68,7 @@ export default function SetProfile(){
         console.log(profileFile);
         
 
-        await fetch(`http://${import.meta.env.VITE_APP_URL}:3000/set_profile`,{
+        await fetch(`${import.meta.env.VITE_APP_URL}/set_profile`,{
             method:"post",
             credentials:"include",
             body:form

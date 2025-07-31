@@ -7,7 +7,7 @@ export default function Notification(){
     const [notifications,setNotifications]=useState([])
 
     useEffect(()=>{
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/current_user`, {
+        fetch(`${import.meta.env.VITE_APP_URL}/current_user`, {
             credentials: "include"
         })
             .then(res => res.json())
@@ -35,7 +35,7 @@ export default function Notification(){
     },[user_id])
 
     useEffect(()=>{
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_notifications`, {
+        fetch(`${import.meta.env.VITE_APP_URL}/fetch_notifications`, {
             credentials: "include"
         })
         .then((res)=>res.json())

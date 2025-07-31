@@ -39,7 +39,7 @@ export default function Post(){
         });
         form.append("caption",caption)
 
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/upload_post`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/upload_post`,{
             method:"post",
             body:form,
             credentials:"include"

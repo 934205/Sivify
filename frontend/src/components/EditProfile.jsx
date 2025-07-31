@@ -17,7 +17,7 @@ export default function EditProfile(){
 
     useEffect(()=>{
         async function checkUsernameExist(){
-            await fetch(`http://${import.meta.env.VITE_APP_URL}:3000/check_username_exist`,{
+            await fetch(`${import.meta.env.VITE_APP_URL}/check_username_exist`,{
                     method:"post",
                     credentials:"include",
                     body:JSON.stringify({
@@ -40,7 +40,7 @@ export default function EditProfile(){
 
     useEffect(()=>{ 
         async function fetch_user(){
-            await fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_user_details`,{
+            await fetch(`${import.meta.env.VITE_APP_URL}/fetch_user_details`,{
                 credentials:"include"
             })
             .then((res)=>res.json())
@@ -76,7 +76,7 @@ export default function EditProfile(){
         }
         
 
-        await fetch(`http://${import.meta.env.VITE_APP_URL}:3000/edit_profile`,{
+        await fetch(`${import.meta.env.VITE_APP_URL}/edit_profile`,{
             method:"post",
             credentials:"include",
             body:form

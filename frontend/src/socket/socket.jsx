@@ -1,6 +1,6 @@
 import {io} from "socket.io-client"
 
-const socket=io(`http://${import.meta.env.VITE_APP_URL}:3000`,{
+const socket=io(`${import.meta.env.VITE_APP_URL}`,{
     autoConnect:false,
     transports:["websocket"]
 })

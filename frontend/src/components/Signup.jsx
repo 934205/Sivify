@@ -15,7 +15,7 @@ export default function Signup(){
             return
         }
         e.preventDefault()
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/check_exist`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/check_exist`,{
             method:"post",
             headers:{
                 "content-type":"application/json"
@@ -71,7 +71,7 @@ export default function Signup(){
             return
         }
         e.preventDefault()
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/check_username`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/check_username`,{
             method:"post",
             headers:{
                 "content-type":"application/json"
@@ -144,7 +144,7 @@ export default function Signup(){
         //attach the received otp into body to send backend for verification
         data["received_otp"]=otp
 
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/verify_otp`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/verify_otp`,{
             method:"post",
             headers:{
                 "content-type":"application/json"

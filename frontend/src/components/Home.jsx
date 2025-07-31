@@ -12,7 +12,7 @@ export default function Home(){
     const [user_id,setUserId]=useState()
 
     useEffect(()=>{
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/current_user`, {
+        fetch(`${import.meta.env.VITE_APP_URL}/current_user`, {
             credentials: "include"
         })
             .then(res => res.json())
@@ -35,7 +35,7 @@ export default function Home(){
 
 
     useEffect(()=>{
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/home`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/home`,{
             credentials:"include"
         })
         .then((res)=>res.json())
@@ -48,7 +48,7 @@ export default function Home(){
     },[])
 
     useEffect(()=>{
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_posts`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/fetch_posts`,{
             credentials:"include"
         })
         .then((res)=>res.json())

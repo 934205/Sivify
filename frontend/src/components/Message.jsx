@@ -13,7 +13,7 @@ export default function Message(){
     useEffect(()=>{
 
         async function fetch_details() {
-            fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_following`,{
+            fetch(`${import.meta.env.VITE_APP_URL}/fetch_following`,{
                 credentials:"include"
             })
             .then((res)=>res.json())
@@ -29,7 +29,7 @@ export default function Message(){
 
     useEffect(()=>{
                 async function fetch_msg_req(){
-                fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_msg_req`,{
+                fetch(`${import.meta.env.VITE_APP_URL}/fetch_msg_req`,{
                     credentials:"include"
                 })
                 .then((res)=>res.json())
@@ -81,7 +81,7 @@ export default function Message(){
     function handleSelectedUser(follower){
         setSelectedUser(follower)
 
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_messages/${follower.following_id}`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/fetch_messages/${follower.following_id}`,{
             credentials:"include"
         })
         .then((res)=>res.json())

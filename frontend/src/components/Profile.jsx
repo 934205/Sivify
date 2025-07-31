@@ -9,7 +9,7 @@ export default function Profile(){
 
     useEffect(()=>{
 
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/profile`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/profile`,{
             credentials:"include"
         })
         .then((res)=>res.json())
@@ -27,7 +27,7 @@ export default function Profile(){
 
     useEffect(()=>{
         if(!user.user_id)return
-            fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_single_user_posts/${user.user_id}`,{
+            fetch(`${import.meta.env.VITE_APP_URL}/fetch_single_user_posts/${user.user_id}`,{
             credentials:"include"
         })
         .then((res)=>res.json())
@@ -44,7 +44,7 @@ export default function Profile(){
 
     //handle logout process
     function logout(){
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/logout`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/logout`,{
             credentials:"include"
         })
         .then((res)=>res.json())

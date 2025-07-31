@@ -14,7 +14,7 @@ export default function SingleUser(){
     const [loggedInUser, setLoggedInUser] = useState("");
 
     useEffect(() => {
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/current_user`, {
+        fetch(`${import.meta.env.VITE_APP_URL}/current_user`, {
             credentials: "include"
         })
             .then(res => res.json())
@@ -22,7 +22,7 @@ export default function SingleUser(){
     },[]);
 
     useEffect(()=>{
-            fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_single_user_posts/${user_id}`,{
+            fetch(`${import.meta.env.VITE_APP_URL}/fetch_single_user_posts/${user_id}`,{
             credentials:"include"
         })
         .then((res)=>res.json())
@@ -35,7 +35,7 @@ export default function SingleUser(){
 
     useEffect(()=>{
         function fetch_user(){            
-            fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_single_user_profile/${user_id}`,{
+            fetch(`${import.meta.env.VITE_APP_URL}/fetch_single_user_profile/${user_id}`,{
                 credentials:"include"
             })
             .then((res)=>res.json())
@@ -48,7 +48,7 @@ export default function SingleUser(){
         if(!user_id)return
 
         
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/is_follower`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/is_follower`,{
             credentials:"include",
             method:"post",
             body:JSON.stringify({"following_id":user_id}),
@@ -64,7 +64,7 @@ export default function SingleUser(){
 
 
     function followRequest(){
-        const url = isFollower ? `http://${import.meta.env.VITE_APP_URL}:3000/unfollow` : `http://${import.meta.env.VITE_APP_URL}:3000/follow`
+        const url = isFollower ? `${import.meta.env.VITE_APP_URL}/unfollow` : `${import.meta.env.VITE_APP_URL}/follow`
 
         fetch(url,{
             method:"post",

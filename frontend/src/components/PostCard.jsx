@@ -28,7 +28,7 @@ const navigate=useNavigate()
   function handleLike(post_id,user_id) {
   const isLiked = liked_posts.includes(post_id);
 
-  fetch(`http://${import.meta.env.VITE_APP_URL}:3000/like`, {
+  fetch(`${import.meta.env.VITE_APP_URL}/like`, {
     method: "post",
     headers: {
       "content-type": "application/json"
@@ -53,7 +53,7 @@ const navigate=useNavigate()
   const [liked_posts,setLikedPosts]=useState([])
 
   useEffect(()=>{
-    fetch(`http://${import.meta.env.VITE_APP_URL}:3000/fetch_likes`,{
+    fetch(`${import.meta.env.VITE_APP_URL}/fetch_likes`,{
       credentials:"include"
     })
     .then((res)=>res.json())
@@ -66,7 +66,7 @@ const navigate=useNavigate()
 
   const [loggedInUser, setLoggedInUser] = useState("");
   useEffect(() => {
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/current_user`, {
+        fetch(`${import.meta.env.VITE_APP_URL}/current_user`, {
             credentials: "include"
         })
             .then(res => res.json())
@@ -78,7 +78,7 @@ const navigate=useNavigate()
 
     useEffect(()=>{
         
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/is_follower`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/is_follower`,{
             credentials:"include",
             method:"post",
             body:JSON.stringify({"following_id":post.user_id}),
@@ -93,7 +93,7 @@ const navigate=useNavigate()
 
 
     function followRequest(){
-        const url = isFollower ? `http://${import.meta.env.VITE_APP_URL}:3000/unfollow` : `http://${import.meta.env.VITE_APP_URL}:3000/follow`
+        const url = isFollower ? `${import.meta.env.VITE_APP_URL}/unfollow` : `${import.meta.env.VITE_APP_URL}/follow`
 
         fetch(url,{
             method:"post",
@@ -111,7 +111,7 @@ const navigate=useNavigate()
 
     function deletePost(){
       setShowModal(!showmodal)
-      fetch(`http://${import.meta.env.VITE_APP_URL}:3000/delete_post/${post.post_id}`,{
+      fetch(`${import.meta.env.VITE_APP_URL}/delete_post/${post.post_id}`,{
             credentials:"include",
             method:"post",
             body:JSON.stringify({"following_id":post.user_id}),

@@ -15,7 +15,7 @@ export default function Search(){
         }
 
         async function fetchUsers() {
-            await fetch(`http://${import.meta.env.VITE_APP_URL}:3000/search?username=${username}`,{
+            await fetch(`${import.meta.env.VITE_APP_URL}/search?username=${username}`,{
             credentials:"include"
         })
         .then((res)=>res.json())

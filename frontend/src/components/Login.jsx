@@ -45,7 +45,7 @@ export default function Login(){
             return
         }
 
-        fetch(`http://${import.meta.env.VITE_APP_URL}:3000/login`,{
+        fetch(`${import.meta.env.VITE_APP_URL}/login`,{
             method:"post",
             headers:{
                 "content-type":"application/json"
