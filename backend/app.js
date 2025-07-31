@@ -31,7 +31,7 @@ const uplod=multer({memoryStorage,limits:{fileSize: 20 * 1024 * 1024 }})
 app.use(express.json({limit:"50mb"}))
 app.use(cors(
     {
-    origin: ["http://localhost:5173","https://sivify.onrender.com"], 
+    origin: ["http://localhost:5173","https://sivify-frontend.onrender.com"], 
     credentials: true 
     }
 ))
