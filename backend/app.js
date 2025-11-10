@@ -1033,65 +1033,132 @@ app.post("/check_exist", async (req, res, next) => {
 });
 
 //check whether the username already exist during signup process if not sent otp to the mail
-app.post("/check_username", async (req, res, next) => {
-  const body = req.body;
+// app.post("/check_username", async (req, res, next) => {
+//   const body = req.body;
 
-  // check whether the username already exists
-  const { data: users, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', body.username)
-    .limit(1);
+//   // check whether the username already exists
+//   const { data: users, error } = await supabase
+//     .from('users')
+//     .select('*')
+//     .eq('user_id', body.username)
+//     .limit(1);
 
-  if (error) {
-    return res.json({ exists: false });
-  }
+//   if (error) {
+//     return res.json({ exists: false });
+//   }
 
-  if (users && users.length > 0) {
-    // if username already exists then return the response as exists true
-    return res.json({
-      exists: true
-    });
-  } else {
-    // generate otp and store on db and send mail
+//   if (users && users.length > 0) {
+//     // if username already exists then return the response as exists true
+//     return res.json({
+//       exists: true
+//     });
+//   } else {
+//     // generate otp and store on db and send mail
+//     const otp = Math.floor(100000 + Math.random() * 900000);
+//     const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 mins expiry
+
+//     // insert otp on db
+//     const { data: insertedOtp, error: insertErr } = await supabase
+//       .from('otp')
+//       .insert({ email: body.email, otp: otp, expired_at: expiresAt })
+//       .select();
+
+//     if (insertErr || !insertedOtp) {
+//       return res.json({
+//         otp_sent: false,
+//         exists: false,
+//       });
+//     }
+
+//     // sending mail
+//     const options = {
+//       from: process.env.EMAIL_USER,
+//       to: body.email,
+//       subject: "OTP from Sivify",
+//       text: `otp for sivify signup : ${otp} , this otp is valid for 2 minites`
+//     };
+
+//     transport.sendMail(options, (err, result) => {
+//       if (err) {
+//         return res.json({
+//           otp_sent: false,
+//           exists: false,
+//         });
+//       }
+//       return res.json({
+//         otp_sent: true,
+//         exists: false
+//       });
+//     });
+//   }
+// });
+
+app.post("/check_username", async (req, res) => {
+  try {
+    const { email, username, password } = req.body;
+
+    if (!email || !username || !password) {
+      return res.json({ exists: false, otp_sent: false, message: "Missing data" });
+    }
+
+    // check whether username already exists
+    const { data: users, error: userErr } = await supabase
+      .from('users')
+      .select('user_id')
+      .eq('user_id', username)
+      .limit(1);
+
+    if (userErr) {
+      console.log("Supabase error:", userErr);
+      return res.json({ exists: false, otp_sent: false });
+    }
+
+    if (users && users.length > 0) {
+      // username already taken
+      return res.json({ exists: true });
+    }
+
+    // generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
     const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 mins expiry
 
-    // insert otp on db
+    // delete any old OTP for same email (optional cleanup)
+    await supabase.from("otp").delete().eq("email", email);
+
+    // insert new OTP
     const { data: insertedOtp, error: insertErr } = await supabase
       .from('otp')
-      .insert({ email: body.email, otp: otp, expired_at: expiresAt })
+      .insert([{ email, otp: otp.toString(), expired_at: expiresAt }])
       .select();
 
     if (insertErr || !insertedOtp) {
-      return res.json({
-        otp_sent: false,
-        exists: false,
-      });
+      console.log("OTP insert error:", insertErr);
+      return res.json({ exists: false, otp_sent: false });
     }
 
-    // sending mail
-    const options = {
+    // send mail
+    const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: body.email,
+      to: email,
       subject: "OTP from Sivify",
-      text: `otp for sivify signup : ${otp} , this otp is valid for 2 minites`
+      text: `Your OTP for Sivify signup is ${otp}. It is valid for 2 minutes.`,
     };
 
-    transport.sendMail(options, (err, result) => {
+    transport.sendMail(mailOptions, (err, result) => {
       if (err) {
-        return res.json({
-          otp_sent: false,
-          exists: false,
-        });
+        console.log("Mail error:", err);
+        return res.json({ exists: false, otp_sent: false });
       }
-      return res.json({
-        otp_sent: true,
-        exists: false
-      });
+
+      console.log(`OTP ${otp} sent to ${email}`);
+      return res.json({ exists: false, otp_sent: true });
     });
+  } catch (err) {
+    console.log("Error in /check_username:", err);
+    return res.json({ exists: false, otp_sent: false });
   }
 });
+
 
 //verify the otp received from user
 app.post("/verify_otp", async (req, res, next) => {
