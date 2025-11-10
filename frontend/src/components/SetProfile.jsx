@@ -121,7 +121,7 @@ export default function SetProfile(){
             <button className="flex flex-col items-center" onClick={()=>{document.getElementById("profile_selector").click()}}><img className="w-20 h-20 cursor-pointer rounded-full" src={selectedProfilePic || profilePic}/>Upload Profile Picture</button>
 
             <button disabled={loading} className={`bg-pink-400 rounded hover:bg-pink-600 text-white py-2 px-6 cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-pink-600 cursor-pointer"}`} onClick={handleSave}>
-                {loading?<span className="loading loading-spinner text-accent"></span>:"Post"}
+                {loading?<span className="loading loading-spinner text-accent"></span>:"Save"}
             </button>
 
 
