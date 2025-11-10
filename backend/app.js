@@ -1264,7 +1264,20 @@ app.post("/check_username", async (req, res) => {
     }
 
     console.log(`New user ${username} created`);
-    return res.json({ exists: false, success: true, message: "Signup successful" });
+    //return res.json({ exists: false, success: true, message: "Signup successful" });
+
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000
+      })
+      .json({
+        exists: false,
+        success: true,
+        message: "Signup successful"
+      });
 
   } catch (err) {
     console.log("Unhandled error:", err);
