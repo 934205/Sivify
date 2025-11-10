@@ -1093,47 +1093,114 @@ app.post("/check_exist", async (req, res, next) => {
 //   }
 // });
 
+// app.post("/check_username", async (req, res) => {
+//   try {
+//     const { email, username, password } = req.body;
+
+//     if (!email || !username || !password) {
+//       return res.json({ exists: false, otp_sent: false, message: "Missing data" });
+//     }
+
+//     // check whether username already exists
+//     const { data: users, error: userErr } = await supabase
+//       .from('users')
+//       .select('user_id')
+//       .eq('user_id', username)
+//       .limit(1);
+
+//     if (userErr) {
+//       console.log("Supabase error:", userErr);
+//       return res.json({ exists: false, otp_sent: false });
+//     }
+
+//     if (users && users.length > 0) {
+//       // username already taken
+//       return res.json({ exists: true });
+//     }
+
+//     // generate OTP
+//     const otp = Math.floor(100000 + Math.random() * 900000);
+//     const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 mins expiry
+
+//     // delete any old OTP for same email (optional cleanup)
+//     await supabase.from("otp").delete().eq("email", email);
+
+//     // insert new OTP
+//     const { data: insertedOtp, error: insertErr } = await supabase
+//       .from('otp')
+//       .insert([{ email, otp: otp.toString(), expired_at: expiresAt }])
+//       .select();
+
+//     if (insertErr || !insertedOtp) {
+//       console.log("OTP insert error:", insertErr);
+//       return res.json({ exists: false, otp_sent: false });
+//     }
+
+//     // send mail
+//     const mailOptions = {
+//       from: process.env.EMAIL_USER,
+//       to: email,
+//       subject: "OTP from Sivify",
+//       text: `Your OTP for Sivify signup is ${otp}. It is valid for 2 minutes.`,
+//     };
+
+//     transport.sendMail(mailOptions, (err, result) => {
+//       if (err) {
+//         console.log("Mail error:", err);
+//         return res.json({ exists: false, otp_sent: false });
+//       }
+
+//       console.log(`OTP ${otp} sent to ${email}`);
+//       return res.json({ exists: false, otp_sent: true });
+//     });
+//   } catch (err) {
+//     console.log("Error in /check_username:", err);
+//     return res.json({ exists: false, otp_sent: false });
+//   }
+// });
+
 app.post("/check_username", async (req, res) => {
   try {
     const { email, username, password } = req.body;
 
     if (!email || !username || !password) {
-      return res.json({ exists: false, otp_sent: false, message: "Missing data" });
+      console.log("Missing fields");
+      return res.status(400).json({ exists: false, otp_sent: false, message: "Missing data" });
     }
 
-    // check whether username already exists
+    // check username existence
     const { data: users, error: userErr } = await supabase
-      .from('users')
-      .select('user_id')
-      .eq('user_id', username)
+      .from("users")
+      .select("user_id")
+      .eq("user_id", username)
       .limit(1);
 
     if (userErr) {
-      console.log("Supabase error:", userErr);
-      return res.json({ exists: false, otp_sent: false });
+      console.log("Supabase select error:", userErr);
+      return res.status(500).json({ exists: false, otp_sent: false, message: "DB error" });
     }
 
     if (users && users.length > 0) {
-      // username already taken
+      console.log("Username exists");
       return res.json({ exists: true });
     }
 
     // generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 mins expiry
+    const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
 
-    // delete any old OTP for same email (optional cleanup)
+    // delete any old OTP for same email
     await supabase.from("otp").delete().eq("email", email);
 
-    // insert new OTP
+    // insert OTP
     const { data: insertedOtp, error: insertErr } = await supabase
-      .from('otp')
+      .from("otp")
       .insert([{ email, otp: otp.toString(), expired_at: expiresAt }])
       .select();
 
-    if (insertErr || !insertedOtp) {
+    if (insertErr) {
       console.log("OTP insert error:", insertErr);
-      return res.json({ exists: false, otp_sent: false });
+      return res.status(500).json({ exists: false, otp_sent: false, message: "OTP insert failed" });
     }
 
     // send mail
@@ -1144,18 +1211,18 @@ app.post("/check_username", async (req, res) => {
       text: `Your OTP for Sivify signup is ${otp}. It is valid for 2 minutes.`,
     };
 
-    transport.sendMail(mailOptions, (err, result) => {
+    transport.sendMail(mailOptions, (err) => {
       if (err) {
         console.log("Mail error:", err);
-        return res.json({ exists: false, otp_sent: false });
+        return res.status(500).json({ exists: false, otp_sent: false, message: "Mail failed" });
       }
 
       console.log(`OTP ${otp} sent to ${email}`);
       return res.json({ exists: false, otp_sent: true });
     });
   } catch (err) {
-    console.log("Error in /check_username:", err);
-    return res.json({ exists: false, otp_sent: false });
+    console.log("Unhandled error:", err);
+    return res.status(500).json({ exists: false, otp_sent: false, message: "Server error" });
   }
 });
 
