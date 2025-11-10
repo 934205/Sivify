@@ -135,6 +135,7 @@ export default function Signup() {
 
         fetch(`${import.meta.env.VITE_APP_URL}/check_username`, {
             method: "post",
+            credentials: "include",
             headers: {
                 "content-type": "application/json"
             },
