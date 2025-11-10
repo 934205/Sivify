@@ -1266,7 +1266,7 @@ app.post("/check_username", async (req, res) => {
     console.log(`New user ${username} created`);
     //return res.json({ exists: false, success: true, message: "Signup successful" });
 
-    const token = jwt.sign({ email: body.email, user_id: body.username }, process.env.JSON_SECRET);
+    const token = jwt.sign({ email: email, user_id: username }, process.env.JSON_SECRET);
 
     return res
       .cookie("token", token, {
