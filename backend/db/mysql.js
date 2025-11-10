@@ -10,9 +10,7 @@ const pool=mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    ssl: {
-    rejectUnauthorized: true, // or false if you're using self-signed certs
-  },
+    
 })
 
 module.exports=pool

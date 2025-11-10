@@ -16,7 +16,7 @@ function verifyToken(req,res,next){
         if(err){
             return res.status(403).json({
                 success:false,
-                message:"invalid or expired token"
+                message:"invalid or expired token",
             })
         }        
         req.user=data
