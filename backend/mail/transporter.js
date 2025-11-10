@@ -15,22 +15,38 @@
 //   module.exports=transport
 
 
+// const nodemailer = require("nodemailer");
+
+// const transport = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 587, // use 587 instead of 465
+//   secure: false, // false for TLS
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+// });
+
+// module.exports = transport;
+
 const nodemailer = require("nodemailer");
 
+
 const transport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587, // use 587 instead of 465
-  secure: false, // false for TLS
+  host: "smtp-relay.brevo.com",
+  port: 587,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
+    user: "your_brevo_email@example.com",
+    pass: "your_brevo_smtp_key",
   },
 });
 
 module.exports = transport;
+
+
 
 
 
